@@ -14,7 +14,7 @@ const brands = ["All", "Apple", "Samsung", "Google", "OnePlus", "Xiaomi"];
 const conditions = ["All", "Like New", "Excellent", "Good"];
 const NAV_LINKS = ["Home", "Browse", "Sell", "Verified", "Blog"];
 
-function StarRating({ rating }) {
+function StarRating({ rating } : { rating: number }) {
   return (
     <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
       <span style={{ color: "#f59e0b", fontSize: 13 }}>{"★".repeat(Math.floor(rating))}{rating % 1 >= 0.5 ? "½" : ""}</span>
@@ -23,7 +23,7 @@ function StarRating({ rating }) {
   );
 }
 
-function PhoneCard({ phone, onClick }) {
+function PhoneCard({ phone, onClick } : { phone: typeof phones[0], onClick: (p: typeof phones[0]) => void }) {
   const [hov, setHov] = useState(false);
   const disc = Math.round(((phone.originalPrice - phone.price) / phone.originalPrice) * 100);
   return (
@@ -86,7 +86,7 @@ function PhoneCard({ phone, onClick }) {
   );
 }
 
-function Modal({ phone, onClose }) {
+function Modal({ phone, onClose } : { phone: typeof phones[0] | null, onClose: () => void } ) {
   if (!phone) return null;
   const disc = Math.round(((phone.originalPrice - phone.price) / phone.originalPrice) * 100);
   return (
@@ -141,7 +141,7 @@ export default function CoreTechMobile() {
   const [selectedBrand, setSelectedBrand] = useState("All");
   const [selectedCondition, setSelectedCondition] = useState("All");
   const [search, setSearch] = useState("");
-  const [selectedPhone, setSelectedPhone] = useState(null);
+  const [selectedPhone, setSelectedPhone] = useState<typeof phones[0] | null>(null);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -291,7 +291,7 @@ export default function CoreTechMobile() {
           <div style={{ textAlign: "center", padding: "80px 0", color: "#94a3b8", fontSize: 16, fontFamily: "var(--fb)" }}>No phones found. Try a different filter.</div>
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))", gap: 20 }}>
-            {filtered.map(phone => <PhoneCard key={phone.id} phone={phone} onClick={setSelectedPhone} />)}
+            {filtered.map(phone => <PhoneCard key={phone.id} phone={phone} onClick={(phone) => setSelectedPhone(phone )} />)}
           </div>
         )}
       </section>
