@@ -118,19 +118,19 @@ const conditions = ["All", "Like New", "Excellent", "Good"];
 
 const NAV_LINKS = ["Home", "Browse", "Sell", "Verified", "Blog"];
 
-function StarRating({ rating }) {
+function StarRating({ rating } : { rating: number }) {
   return (
     <span style={{ color: "#f5b301", fontSize: 12, letterSpacing: 1 }}>
       {"★".repeat(Math.floor(rating))}
       {rating % 1 >= 0.5 ? "½" : ""}
-      <span style={{ color: "#444", marginLeft: 4, fontSize: 11, fontFamily: "DM Sans, sans-serif", color: "#aaa" }}>
+      <span style={{ color: "#444", marginLeft: 4, fontSize: 11, fontFamily: "DM Sans, sans-serif",}}>
         {rating}
       </span>
     </span>
   );
 }
 
-function Badge({ text, color }) {
+function Badge({ text, color }: { text: string; color: string }) {
   return (
     <span style={{
       background: color + "22",
@@ -147,7 +147,7 @@ function Badge({ text, color }) {
   );
 }
 
-function PhoneCard({ phone, onClick }) {
+function PhoneCard({ phone, onClick } : { phone: typeof phones[0]; onClick: (p: typeof phones[0]) => void }) {
   const [hovered, setHovered] = useState(false);
   const discount = Math.round(((phone.originalPrice - phone.price) / phone.originalPrice) * 100);
 
@@ -266,7 +266,7 @@ function PhoneCard({ phone, onClick }) {
   );
 }
 
-function Modal({ phone, onClose }) {
+function Modal({ phone, onClose } : { phone: typeof phones[0] | null; onClose: () => void }) {
   if (!phone) return null;
   const discount = Math.round(((phone.originalPrice - phone.price) / phone.originalPrice) * 100);
 
@@ -392,7 +392,7 @@ export default function PhoneMarket() {
   const [selectedBrand, setSelectedBrand] = useState("All");
   const [selectedCondition, setSelectedCondition] = useState("All");
   const [search, setSearch] = useState("");
-  const [selectedPhone, setSelectedPhone] = useState(null);
+  const [selectedPhone, setSelectedPhone] = useState<typeof phones[0] | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -466,8 +466,8 @@ export default function PhoneMarket() {
               transition: "color 0.2s",
               letterSpacing: 0.2,
             }}
-              onMouseOver={e => e.target.style.color = "#fff"}
-              onMouseOut={e => e.target.style.color = "#888"}
+              onMouseOver={e => (e.target as HTMLElement).style.color = "#fff"}
+              onMouseOut={e => (e.target as HTMLElement).style.color = "#888"}
             >{l}</a>
           ))}
         </div>
@@ -683,7 +683,7 @@ export default function PhoneMarket() {
             gap: 20,
           }}>
             {filtered.map(phone => (
-              <PhoneCard key={phone.id} phone={phone} onClick={setSelectedPhone} />
+              <PhoneCard key={phone.id} phone={phone} onClick={(p) => setSelectedPhone(p)} />
             ))}
           </div>
         )}
